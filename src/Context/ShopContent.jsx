@@ -35,7 +35,20 @@ const ShopContextProvider = (props) => {
     }
 
      const removeFromCart = (ItemId) =>{
-        setCartItems((prev)=> ({...prev, [ItemId]:prev[ItemId]-1}))
+        setCartItems((prev)=> ({...prev, [ItemId]:prev[ItemId]-1}));
+        if(localStorage.getItem('auth-token')){
+            fetch('http://localhost:4000/removecart',{
+                method:'POST',
+                headers:{
+                    Accept:'application/form-data',
+                    'auth-token':`${localStorage.getItem('auth-token')}`,
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify({"itemId":ItemId}),
+            })
+            .then((response)=>{response.json()}).then((data)=> console.log(data))
+        
+        }
     }
 
     const getTotalCartAmount = () => {
